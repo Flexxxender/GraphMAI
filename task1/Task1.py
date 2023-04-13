@@ -3,7 +3,7 @@ import copy
 
 class GraphFeatures:
 
-    # конструктор, в котором инициализируются матрица смежности и матрица достижимости графа
+    # конструктор, в котором инициализируются матрица смежности и матрица достижимости графа,
     # а также их длины, является ли граф связным и ориентированным
     def __init__(self, graph):
         self.__distance_matrix = self.__floyd_warshall(graph.adjacency_matrix())
@@ -106,7 +106,7 @@ class GraphFeatures:
                 vector.append(sum([1 for j in rows if j != 1000000]))
             return vector
         
-        # иначе мы имеемм дело с орграфом, то есть требуется посчитать
+        # иначе мы имеем дело с орграфом, то есть требуется посчитать
         # степени захода и исхода для каждой из вершин
         vector_plus = [0 for i in range(self.__adj_matrix_len)]
         vector_minus = [0 for i in range(self.__adj_matrix_len)]

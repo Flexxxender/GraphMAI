@@ -7,7 +7,7 @@ def matrix_strategy(path):
         for line in file:
             matrix.append([int(s) for s in line.split()])
 
-         # если в файле были нули (то есть остутсвие пути) - заменяем их на бесконечности
+        # если в файле были нули (то есть отсутствие пути) - заменяем их на бесконечности
         for i in range(len(matrix)):
             for j in range(len(matrix)):
                 matrix[i][j] = matrix[i][j] if matrix[i][j] != 0 else 1000000
@@ -30,9 +30,9 @@ def edges_strategy(path):
     for line in lines:
         temp = [int(s) for s in line.split()]  # парсим строку ребра
         if len(temp) == 3:
-            matrix[temp[0]-1][temp[1]-1] = temp[2] # (i-1;j-1) ребро с весом temp[2]
+            matrix[temp[0] - 1][temp[1] - 1] = temp[2]  # (i-1;j-1) ребро с весом temp[2]
         elif len(temp) == 2:
-             matrix[temp[0]-1][temp[1]-1] = 1
+            matrix[temp[0] - 1][temp[1] - 1] = 1
     return matrix
 
 
@@ -47,7 +47,7 @@ def list_strategy(path):
     current_row = 0
 
     for line in lines:
-        temp = [int(s) for s in line.split()]     # парсим список смежности
+        temp = [int(s) for s in line.split()]  # парсим список смежности
         for elem in temp:
             matrix[current_row][elem - 1] = 1  # ( i-1;j-1) ребро с весом 1
         current_row += 1

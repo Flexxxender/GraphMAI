@@ -33,13 +33,13 @@ class Graph:
         if not vert:  # ребра для графа
             for i in range(self.__matrix_len):
                 for j in range(self.__matrix_len):
-                    if (self.is_edge(i, j) and i != j):
+                    if self.is_edge(i, j) and i != j:
                         edges.append([i, j])
         else:  # ребра для вершины
             for j in range(self.__matrix_len):
-                if (self.is_edge(vert, j) and vert != j):
+                if self.is_edge(vert, j) and vert != j:
                     edges.append([vert, j])
-                if (self.is_edge(j, vert) and vert != j):
+                if self.is_edge(j, vert) and vert != j:
                     edges.append([j, vert])
         return edges
 

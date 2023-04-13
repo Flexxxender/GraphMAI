@@ -2,6 +2,7 @@ import argparse
 from task0 import Graph, Output, Strategy
 from task1 import Task1
 
+
 # создание парсера, который будет считывать флаги исходного файла
 # и также выходного, если потребуется
 def create_parser():
@@ -12,6 +13,7 @@ def create_parser():
     parser.add_argument('-o', default=False)
 
     return parser
+
 
 # проверка на то, что введен только один флаг из трех (-e, -m, -l)
 def check_num_args(args):
@@ -33,13 +35,14 @@ def check_num_args(args):
     # иначе возвращаем ошибку
     return False, False
 
+
 # проверка на нужду выходного файла
 def check_file_needed(arg_o):
     if arg_o != False:
         # если файл нужен - меняем поток вывода из консоли на файл
         output.switch_to_file_output(arg_o)
         # очищаем файл путем открытия его для записи перед основной работой
-        with open (arg_o, "w") as file:
+        with open(arg_o, "w") as file:
             file.write("")
 
 
@@ -51,8 +54,8 @@ if __name__ == '__main__':
         'l': lambda path: Strategy.list_strategy(path)
     }
 
-    output = Output.Output()   # создаем экземпляр класса Output из модуля Output
-    parser = create_parser()   # создаем парсер
+    output = Output.Output()  # создаем экземпляр класса Output из модуля Output
+    parser = create_parser()  # создаем парсер
     args = parser.parse_args()  # получаем все флаги этого парсера
 
     try:
@@ -85,7 +88,7 @@ if __name__ == '__main__':
 
             # вывод матрицы достижимости, эксцентриситетов, диаметра, радиуса,
             # центральных и периферийных вершин
-            output.write("Distancies:")
+            output.write("Distances:")
             output.write('\n'.join(map(str, task1_graph.distance_matrix())), end='\n\n')
             output.write("Eccentricity:", task1_graph.eccentricity(), sep='\n')
             output.write("D =", task1_graph.diameter())
