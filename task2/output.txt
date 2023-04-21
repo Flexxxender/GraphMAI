@@ -1,0 +1,5 @@
+﻿Graph is weakly connected
+2 Strongly connected components:
+ [[1, 2, 3], [0, 5, 4, 6]]
+1 Weakly connected components:
+ [[0, 1, 2, 3, 4, 5, 6]]

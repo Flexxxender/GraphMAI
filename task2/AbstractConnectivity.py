@@ -7,10 +7,8 @@ class GraphConnectivity(ABC):
         self.__adj_matrix_len = len(self._adjacency_matrix)
 
     def BFS(self, vertex, matrix):
-        queue = []
-        marked_vertices = set()
-        queue.append(vertex)
-        marked_vertices.add(vertex)
+        queue = [vertex]
+        marked_vertices = [vertex]
 
         while len(queue):
             current_vertex = queue.pop(0)
@@ -18,8 +16,9 @@ class GraphConnectivity(ABC):
             for neighbour in neighbours:
                 if neighbour not in marked_vertices:
                     queue.append(neighbour)
-                    marked_vertices.add(neighbour)
+                    marked_vertices.append(neighbour)
 
+        marked_vertices.sort()
         return marked_vertices
 
     def is_connected(self, matrix):
@@ -28,29 +27,30 @@ class GraphConnectivity(ABC):
         return True
 
     def count_connected_components(self, matrix):
-        vertices = set(int(i) for i in range(len(matrix)))
+        vertices = [int(i) for i in range(len(matrix))]
         counter = 0
-        components = set()
+        components = []
 
-        for vertex in vertices:
-            component = self.BFS(vertex, matrix)
-            vertices -= component
+        for current_vertex in vertices:
+            component = self.BFS(current_vertex, matrix)
+
+            for vertex in component:
+                vertices.pop(vertices.index(vertex))
+
             counter += 1
-            components.add(component)
+            components.append(component)
 
         return counter, components
 
     def DFS(self, vertex, counter, counters, matrix):
-        vertices = []
+        vertices = [vertex]
         stack = [vertex]
 
         while len(stack):
             current_vertex = stack.pop()
 
-            if counters[current_vertex] == 0:
-                vertices.append(current_vertex)
-            counter += 1
-            counters[current_vertex] = counter
+            counter[0] += 1
+            counters[current_vertex] = counter[0]
 
             unmarked_neighbours = []
             neighbours = self.adjacency_list(matrix, current_vertex)
@@ -61,6 +61,7 @@ class GraphConnectivity(ABC):
             for vertex in unmarked_neighbours:
                 stack.append(current_vertex)
                 stack.append(vertex)
+                vertices.append(vertex)
                 break
 
         return vertices

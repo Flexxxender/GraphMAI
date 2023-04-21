@@ -1,4 +1,4 @@
-import AbstractConnectivity
+from task2 import AbstractConnectivity
 
 
 class DirectedGraph(AbstractConnectivity.GraphConnectivity):
@@ -12,10 +12,10 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
         return super().is_connected(self.associated_matrix())
 
     def count_weak_connected_components(self):
-        return super().is_connected(self._adjacency_matrix)
+        return super().count_connected_components(self.associated_matrix())
 
     def associated_matrix(self):
-        associated_matrix = self.__matrix
+        associated_matrix = self.__graph.adjacency_matrix()
 
         for i in range(self.__matrix_len):
             for j in range(self.__matrix_len):
@@ -25,7 +25,34 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
         return associated_matrix
 
     def kosaraju(self):
+        components = []
+        count_components = 0
         transpose_matrix = self.transpose_matrix(self.__matrix)
+
+        counters = [0] * self.__matrix_len
+        vertices = [i for i in range(self.__matrix_len)]
+        counter = [0]
+
+        while len(vertices):
+            dfs_result = super().DFS(vertices[0], counter,
+                                     counters, self.__matrix)
+            for vertex in dfs_result:
+                vertices.pop(vertices.index(vertex))
+
+        counters_copy = [0] * self.__matrix_len
+        vertices = [i for i in range(self.__matrix_len)]
+        counter = [0]
+
+        while len(vertices):
+            component = super().DFS(counters.index(max(counters)), counter, counters_copy, transpose_matrix)
+
+            count_components += 1
+            components.append(component)
+            for vertex in component:
+                vertices.pop(vertices.index(vertex))
+                counters[vertex] = 0
+
+        return count_components, components
 
     @staticmethod
     def transpose_matrix(matrix):

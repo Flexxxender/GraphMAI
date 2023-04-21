@@ -1,4 +1,4 @@
-import AbstractConnectivity
+from task2 import AbstractConnectivity
 
 
 class UndirectedGraph(AbstractConnectivity.GraphConnectivity):

@@ -38,7 +38,7 @@ def check_num_args(args):
 
 # проверка на нужду выходного файла
 def check_file_needed(arg_o):
-    if arg_o != False:
+    if arg_o:
         # если файл нужен - меняем поток вывода из консоли на файл
         output.switch_to_file_output(arg_o)
         # очищаем файл путем открытия его для записи перед основной работой
