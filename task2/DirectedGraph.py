@@ -3,51 +3,58 @@ from task2 import AbstractConnectivity
 
 class DirectedGraph(AbstractConnectivity.GraphConnectivity):
     def __init__(self, graph):
-        super().__init__(graph)
-        self.__graph = graph
-        self.__matrix = self.__graph.adjacency_matrix()
-        self.__matrix_len = len(self.__matrix)
+        super().__init__(graph)  # инициализируем матрицу смежности
+        self.__graph = graph  # получаем граф
 
+    # проверка на слабую связность графа через BFS из абстрактного класса
     def is_graph_weak_connected(self):
         return super().is_connected(self.associated_matrix())
 
+    # подсчет и состав слабых компонент связности графа через BFS из абстрактного класса
     def count_weak_connected_components(self):
         return super().count_connected_components(self.associated_matrix())
 
+    # получение матрицы смежности ассоциативного графа
     def associated_matrix(self):
         associated_matrix = self.__graph.adjacency_matrix()
 
-        for i in range(self.__matrix_len):
-            for j in range(self.__matrix_len):
+        for i in range(self._matrix_len):
+            for j in range(self._matrix_len):
                 if self.__graph.is_edge(i, j):
                     associated_matrix[j][i] = associated_matrix[i][j]
 
         return associated_matrix
 
+    # алгоритм Косараджу (Косарайю)
     def kosaraju(self):
+        # инициализация компонент, кол-ва компонент и транспонированной матрицы (инвертированного графа)
         components = []
         count_components = 0
-        transpose_matrix = self.transpose_matrix(self.__matrix)
+        transpose_matrix = self.transpose_matrix(self._matrix)
 
-        counters = [0] * self.__matrix_len
-        vertices = [i for i in range(self.__matrix_len)]
-        counter = [0]
+        counters = [0] * self._matrix_len  # порядки выхода из вершин t_out для DFS
+        vertices = [i for i in range(self._matrix_len)]  # массив вершин
+        counter = [0]  # счетчик, который считает общий порядок выхода для всех вершин
 
+        # запускаем DFS и удаляем вершины, принадлежащие дереву DFS, повторяем, пока вершины есть
         while len(vertices):
-            dfs_result = super().DFS(vertices[0], counter,
-                                     counters, self.__matrix)
+            dfs_result = super().DFS(vertices[0], counter, counters, self._matrix)
             for vertex in dfs_result:
                 vertices.pop(vertices.index(vertex))
 
-        counters_copy = [0] * self.__matrix_len
-        vertices = [i for i in range(self.__matrix_len)]
+        counters_copy = [0] * self._matrix_len  # копия порядков выхода из вершин, чтобы не перезаписать нужные
+        vertices = [i for i in range(self._matrix_len)]
         counter = [0]
 
+        # запускаем DFS от вершины, имеющей наиболдьший порядок выхода
         while len(vertices):
             component = super().DFS(counters.index(max(counters)), counter, counters_copy, transpose_matrix)
 
+            # запомнили компоненту и обновили счетчик компонент
             count_components += 1
             components.append(component)
+
+            # удаляем вершины из этой компоненты и обнуляем их порядки, чтобы взять другую вершину для DFS
             for vertex in component:
                 vertices.pop(vertices.index(vertex))
                 counters[vertex] = 0
@@ -55,6 +62,7 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
         return count_components, components
 
     @staticmethod
+    # транспонирование матрицы
     def transpose_matrix(matrix):
         new_matrix = [[0] * len(matrix) for i in range(len(matrix))]
         for i in range(len(matrix)):

@@ -7,31 +7,32 @@ from task2 import DirectedGraph, UndirectedGraph
 # создание парсера, который будет считывать флаги исходного файла
 # и также выходного, если потребуется
 def create_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-e', default=False)
-    parser.add_argument('-m', default=False)
-    parser.add_argument('-l', default=False)
-    parser.add_argument('-o', default=False)
+    argument_parser = argparse.ArgumentParser()
+    argument_parser.add_argument('-e', default=False)
+    argument_parser.add_argument('-m', default=False)
+    argument_parser.add_argument('-l', default=False)
+    argument_parser.add_argument('-o', default=False)
 
-    return parser
+    return argument_parser
 
 
 # проверка на то, что введен только один флаг из трех (-e, -m, -l)
-def check_num_args(args):
+def check_num_args(arguments):
     # считаем все ненулевые флаги и вычитаем флаг о, если тот был указан
-    count_flags = sum([1 for flag in vars(args).values() if flag != False])
-    count_flags -= args.o != False
+    count_flags = sum([1 for flag in vars(arguments).values() if flag is not False])
+    count_flags -= arguments.o is not False
 
     # если был указан один флаг, то находим флаг и с каким файлом он был указан
     if count_flags == 1:
-        path = ''
-        for i in vars(args):
+        path_to_file = ''
+        correct_flag = 0
+        for i in vars(arguments):
             # нашли ненулевой флаг - запомнили его и имя файла
-            if vars(args)[i] != False:
-                path = vars(args)[i]
-                flag = i
+            if vars(arguments)[i] is not False:
+                path_to_file = vars(arguments)[i]
+                correct_flag = i
                 break
-        return path, flag
+        return path_to_file, correct_flag
 
     # иначе возвращаем ошибку
     return False, False
@@ -58,7 +59,6 @@ if __name__ == '__main__':
     output = Output.Output()  # создаем экземпляр класса Output из модуля Output
     parser = create_parser()  # создаем парсер
     args = parser.parse_args()  # получаем все флаги этого парсера
-
 
     path, flag = check_num_args(args)
 
@@ -95,4 +95,3 @@ if __name__ == '__main__':
 
     else:
         print("Было передано неверное количество ключей с параметрами")
-
