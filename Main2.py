@@ -94,4 +94,5 @@ if __name__ == '__main__':
                          task2_graph.count_graph_connected_components()[1])
 
     else:
+
         print("Было передано неверное количество ключей с параметрами")
