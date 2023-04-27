@@ -8,22 +8,11 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
 
     # проверка на слабую связность графа через BFS из абстрактного класса
     def is_graph_weak_connected(self):
-        return super().is_connected(self.associated_matrix())
+        return super().is_connected(self.__graph.associated_matrix())
 
     # подсчет и состав слабых компонент связности графа через BFS из абстрактного класса
     def count_weak_connected_components(self):
-        return super().count_connected_components(self.associated_matrix())
-
-    # получение матрицы смежности ассоциативного графа
-    def associated_matrix(self):
-        associated_matrix = self.__graph.adjacency_matrix()
-
-        for i in range(self._matrix_len):
-            for j in range(self._matrix_len):
-                if self.__graph.is_edge(i, j):
-                    associated_matrix[j][i] = associated_matrix[i][j]
-
-        return associated_matrix
+        return super().count_connected_components(self.__graph.associated_matrix())
 
     # алгоритм Косараджу (Косарайю)
     def kosaraju(self):

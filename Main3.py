@@ -1,7 +1,7 @@
 import argparse
 
 from task0 import Graph, Output, Strategy
-from task2 import DirectedGraph, UndirectedGraph
+from task3 import BridgesAndCutVertices
 
 
 # создание парсера, который будет считывать флаги исходного файла
@@ -67,31 +67,10 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[flag](path))
         check_file_needed(args.o)
 
-        if graph.is_directed():
-            task2_graph = DirectedGraph.DirectedGraph(graph)
-            kosaraju = task2_graph.kosaraju()
-            if kosaraju[0] == 1:
-                output.write("Graph is strongly connected")
-            elif task2_graph.is_graph_weak_connected():
-                output.write("Graph is weakly connected")
-            else:
-                output.write("Graph is not connected")
+        task3_graph = BridgesAndCutVertices.BridgesAndCutVertices(graph)
 
-            output.write(kosaraju[0], "Strongly connected components:\n", kosaraju[1])
-            output.write(task2_graph.count_weak_connected_components()[0],
-                         "Weakly connected components:\n",
-                         task2_graph.count_weak_connected_components()[1])
-
-        # если граф не ориентирован
-        else:
-            # выписываем связный он или нет и компоненты связности
-            task2_graph = UndirectedGraph.UndirectedGraph(graph)
-            if task2_graph.is_graph_connected():
-                output.write("Graph is connected")
-            else:
-                output.write("Graph is not connected")
-            output.write(task2_graph.count_graph_connected_components()[0], "Connected components:\n",
-                         task2_graph.count_graph_connected_components()[1])
+        output.write("Bridges: ", task3_graph.get_bridges())
+        output.write("Cut vertices: ", task3_graph.get_cut_vertices())
 
     else:
         print("Было передано неверное количество ключей с параметрами")
