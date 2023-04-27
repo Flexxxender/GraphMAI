@@ -19,11 +19,12 @@ class Graph:
     def adjacency_matrix(self):
         return copy.deepcopy(self.__matrix)
 
-    # возвращает список смежных вершин с вершиной vert
-    def adjacency_list(self, vert):
+    @staticmethod
+    # получение списка смежных вершин к vert
+    def adjacency_list(matrix, vert):
         vertices = []
-        for i in range(self.__matrix_len):
-            if self.is_edge(vert, i) and vert != i:
+        for i in range(len(matrix)):
+            if matrix[vert][i] != 1000000 and vert != i:
                 vertices.append(i)
         return vertices
 
@@ -50,3 +51,15 @@ class Graph:
                 if self.__matrix[i][j] != self.__matrix[j][i]:
                     return True
         return False
+
+    # получение матрицы смежности ассоциативного графа
+    def associated_matrix(self):
+        associated_matrix = self.adjacency_matrix()
+
+        for i in range(self.__matrix_len):
+            for j in range(self.__matrix_len):
+                if self.is_edge(i, j):
+                    associated_matrix[j][i] = associated_matrix[i][j]
+
+        return associated_matrix
+
