@@ -38,6 +38,7 @@ class GraphFeatures:
     def distance_matrix(self):
         return copy.deepcopy(self.__distance_matrix)
 
+    # нахождение эксцентриситетов в графе
     def eccentricity(self):
         if not self.is_connected:
             return -1

@@ -2,6 +2,7 @@ class BridgesAndCutVertices:
     cut_vertcies = []
     bridges = []
 
+    # инициализируем граф, ассоциативную матрицу и tin tup, времена входа для алгоритма поиска
     def __init__(self, graph):
         self.__graph = graph
         self.__associated_matrix = self.__graph.associated_matrix()
@@ -31,6 +32,7 @@ class BridgesAndCutVertices:
                 if vertice in vertices:
                     vertices.remove(vertice)
 
+    # DFS для нахождения мостов и шарниров в графе
     def __bridges_and_cut_vertices_DFS(self, v, bridges, cut_vertices, marked, p=-1):
         marked.append(v)
         component = [v]
