@@ -77,10 +77,9 @@ if __name__ == '__main__':
             else:
                 output.write("Graph is not connected")
 
-            output.write(kosaraju[0], "Strongly connected components:\n", kosaraju[1])
-            output.write(task2_graph.count_weak_connected_components()[0],
-                         "Weakly connected components:\n",
-                         task2_graph.count_weak_connected_components()[1])
+            output.write(f"{kosaraju[0]} Strongly connected components:\n{kosaraju[1]}")
+            output.write(f"{task2_graph.count_weak_connected_components()[0]} Weakly connected components:\n\
+{task2_graph.count_weak_connected_components()[1]}")
 
         # если граф не ориентирован
         else:
@@ -90,8 +89,8 @@ if __name__ == '__main__':
                 output.write("Graph is connected")
             else:
                 output.write("Graph is not connected")
-            output.write(task2_graph.count_graph_connected_components()[0], "Connected components:\n",
-                         task2_graph.count_graph_connected_components()[1])
+            output.write(f"{task2_graph.count_graph_connected_components()[0]} Connected components:\n\
+{task2_graph.count_graph_connected_components()[1]}")
 
     else:
         print("Было передано неверное количество ключей с параметрами")

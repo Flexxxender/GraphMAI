@@ -80,9 +80,9 @@ if __name__ == '__main__':
             # если граф ориентирован - считаем полустепени исхода и захода
             if task1_graph.is_directed:
                 output.write(
-                    "deg+ =", task1_graph.vector_degrees()[0], end='\n')
+                    f"deg+ = {task1_graph.vector_degrees()[0]}")
                 output.write(
-                    "deg- =", task1_graph.vector_degrees()[1], end='\n\n')
+                    f"deg- = {task1_graph.vector_degrees()[1]}", end='\n\n')
             # иначе считаем просто степени
             else:
                 output.write("deg =", task1_graph.vector_degrees(), end='\n\n')
@@ -91,11 +91,11 @@ if __name__ == '__main__':
             # центральных и периферийных вершин
             output.write("Distances:")
             output.write('\n'.join(map(str, task1_graph.distance_matrix())), end='\n\n')
-            output.write("Eccentricity:", task1_graph.eccentricity(), sep='\n')
-            output.write("D =", task1_graph.diameter())
-            output.write("R =", task1_graph.radius())
-            output.write("Z =", task1_graph.central_vertices())
-            output.write("P =", task1_graph.peripheral_vertices())
+            output.write(f"Eccentricity:\n{task1_graph.eccentricity()}")
+            output.write(f"D = {task1_graph.diameter()}")
+            output.write(f"R = {task1_graph.radius()}")
+            output.write(f"Z = {task1_graph.central_vertices()}")
+            output.write(f"P = {task1_graph.peripheral_vertices()}")
 
         else:
             print("Было передано неверное количество ключей с параметрами")

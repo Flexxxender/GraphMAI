@@ -69,8 +69,8 @@ if __name__ == '__main__':
 
         task3_graph = BridgesAndCutVertices.BridgesAndCutVertices(graph)
 
-        output.write("Bridges: ", task3_graph.get_bridges())
-        output.write("Cut vertices: ", task3_graph.get_cut_vertices())
+        output.write(f"Bridges: {task3_graph.get_bridges()}")
+        output.write(f"Cut vertices: {task3_graph.get_cut_vertices()}")
 
     else:
         print("Было передано неверное количество ключей с параметрами")
