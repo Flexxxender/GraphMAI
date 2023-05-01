@@ -2,6 +2,7 @@ class BridgesAndCutVertices:
     cut_vertcies = []
     bridges = []
 
+    # инициализируем граф, ассоциативную матрицу и tin tup, времена входа для алгоритма поиска
     def __init__(self, graph):
         self.__graph = graph
         self.__associated_matrix = self.__graph.associated_matrix()
@@ -16,7 +17,7 @@ class BridgesAndCutVertices:
 
     # получаем точки сочленения (шарниры)
     def get_cut_vertices(self):
-        return self.cut_vertcies
+        return sorted(self.cut_vertcies)
 
     # нахождение мостов и шарниров в графе
     def __find_bridges_and_cut_vertices(self):
@@ -31,6 +32,7 @@ class BridgesAndCutVertices:
                 if vertice in vertices:
                     vertices.remove(vertice)
 
+    # DFS для нахождения мостов и шарниров в графе
     def __bridges_and_cut_vertices_DFS(self, v, bridges, cut_vertices, marked, p=-1):
         marked.append(v)
         component = [v]
@@ -56,11 +58,11 @@ class BridgesAndCutVertices:
                     bridges.append([v + 1, u + 1])
 
                 # условие для шарнира
-                if self.tin[v] <= self.tup[u] and p != -1 and v not in cut_vertices:
+                if self.tin[v] <= self.tup[u] and p != -1 and v + 1 not in cut_vertices:
                     cut_vertices.append(v + 1)
 
         # условие для шарнира в начальной вершине DFS
         if p == -1 and children > 1:
-            cut_vertices.append(v)
+            cut_vertices.append(v + 1)
 
         return component

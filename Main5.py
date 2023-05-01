@@ -1,7 +1,7 @@
 import argparse
 
 from task0 import Graph, Output, Strategy
-from task2 import DirectedGraph, UndirectedGraph
+from task5 import Dijkstra
 
 
 # создание парсера, который будет считывать флаги исходного файла
@@ -13,14 +13,17 @@ def create_parser():
     argument_parser.add_argument('-l', default=False)
     argument_parser.add_argument('-o', default=False)
 
+    argument_parser.add_argument('-n', required=True, type=int)
+    argument_parser.add_argument('-d', required=True, type=int)
+
     return argument_parser
 
 
 # проверка на то, что введен только один флаг из трех (-e, -m, -l)
 def check_num_args(arguments):
-    # считаем все ненулевые флаги и вычитаем флаг о, если тот был указан
+    # считаем все ненулевые флаги и вычитаем флаг о, если тот был указан, а также флаги вершин
     count_flags = sum([1 for flag in vars(arguments).values() if flag is not False])
-    count_flags -= arguments.o is not False
+    count_flags -= (arguments.o is not False) + 2
 
     # если был указан один флаг, то находим флаг и с каким файлом он был указан
     if count_flags == 1:
@@ -67,30 +70,15 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[flag](path))
         check_file_needed(args.o)
 
-        if graph.is_directed():
-            task2_graph = DirectedGraph.DirectedGraph(graph)
-            kosaraju = task2_graph.kosaraju()
-            if kosaraju[0] == 1:
-                output.write("Graph is strongly connected")
-            elif task2_graph.is_graph_weak_connected():
-                output.write("Graph is weakly connected")
-            else:
-                output.write("Graph is not connected")
+        task5_graph = Dijkstra.Graph_Dijkstra(graph, args.n, args.d)
 
-            output.write(f"{kosaraju[0]} Strongly connected components:\n{kosaraju[1]}")
-            output.write(f"{task2_graph.count_weak_connected_components()[0]} Weakly connected components:\n\
-{task2_graph.count_weak_connected_components()[1]}")
-
-        # если граф не ориентирован
+        if task5_graph.distance == -2:
+            output.write("Incorrect data")
+        elif task5_graph.distance == -1:
+            output.write(f"There is no path between the vertices {args.n + 1} and {args.d + 1}.")
         else:
-            # выписываем связный он или нет и компоненты связности
-            task2_graph = UndirectedGraph.UndirectedGraph(graph)
-            if task2_graph.is_graph_connected():
-                output.write("Graph is connected")
-            else:
-                output.write("Graph is not connected")
-            output.write(f"{task2_graph.count_graph_connected_components()[0]} Connected components:\n\
-{task2_graph.count_graph_connected_components()[1]}")
+            output.write(f"Shortest path length between {args.n + 1} and {args.d + 1} vertices: {task5_graph.distance}")
+            output.write(f"Path: {task5_graph.route}")
 
     else:
         print("Было передано неверное количество ключей с параметрами")
