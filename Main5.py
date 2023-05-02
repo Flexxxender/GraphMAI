@@ -59,6 +59,7 @@ if __name__ == '__main__':
         'l': lambda path: Strategy.list_strategy(path)
     }
 
+
     output = Output.Output()  # создаем экземпляр класса Output из модуля Output
     parser = create_parser()  # создаем парсер
     args = parser.parse_args()  # получаем все флаги этого парсера

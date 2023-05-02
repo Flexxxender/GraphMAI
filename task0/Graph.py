@@ -35,13 +35,13 @@ class Graph:
             for i in range(self.__matrix_len):
                 for j in range(self.__matrix_len):
                     if self.is_edge(i, j) and i != j:
-                        edges.append([i, j])
+                        edges.append([i, j, self.__matrix[i][j]])
         else:  # ребра для вершины
             for j in range(self.__matrix_len):
                 if self.is_edge(vert, j) and vert != j:
-                    edges.append([vert, j])
+                    edges.append([vert, j, self.__matrix[vert][j]])
                 if self.is_edge(j, vert) and vert != j:
-                    edges.append([j, vert])
+                    edges.append([j, vert, self.__matrix[j][vert]])
         return edges
 
     # возвращает true, если граф ориентированный, иначе false
