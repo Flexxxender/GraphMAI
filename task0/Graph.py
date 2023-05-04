@@ -1,6 +1,6 @@
 import copy
 
-
+# САНЯ ЛОХ
 class Graph:
     # конструктор класса, принимающий матрицу из списка стратегий
     def __init__(self, matrix):
