@@ -13,13 +13,12 @@ class Graph_Dijkstra:
     # алгоритм Дейкстры
     def __dijkstra(self):
         if self.__begin_vertex >= self.__matrix_len or self.__end_vertex >= self.__matrix_len or \
-           self.__begin_vertex < 0 or self.__end_vertex < 0:
-           return -2, -2
+                self.__begin_vertex < 0 or self.__end_vertex < 0:
+            return -2, -2
 
-
-        costs = [1000000] * self.__matrix_len # массив расстояний до каждой из вершин
-        parents = [-1] * self.__matrix_len # массив родителей для вершин
-        visited = [] # массив посещенных в ходе алгоритма вершин
+        costs = [1000000] * self.__matrix_len  # массив расстояний до каждой из вершин
+        parents = [-1] * self.__matrix_len  # массив родителей для вершин
+        visited = []  # массив посещенных в ходе алгоритма вершин
 
         # изначально родителем стартовой вершины является она сама и расстояние до неё 0
         costs[self.__begin_vertex] = 0
@@ -39,9 +38,9 @@ class Graph_Dijkstra:
 
                 if new_cost < costs[neighbours[i]]:
                     costs[neighbours[i]] = new_cost
-                    parents[neighbours[i]] = node 
+                    parents[neighbours[i]] = node
 
-            # отмечаем вершину и далее выбираем новую с минимальным расстоянием из не посещенных
+                    # отмечаем вершину и далее выбираем новую с минимальным расстоянием из не посещенных
             visited.append(node)
             node = self.__search_min_node(visited, costs)
 
@@ -61,7 +60,7 @@ class Graph_Dijkstra:
             if i not in visited and costs[i] < min_cost:
                 min_cost = costs[i]
                 node = i
-        
+
         return node
 
     # получение пути между начальной и конечной вершинами
@@ -69,15 +68,16 @@ class Graph_Dijkstra:
         route = []
 
         # добавляем ребро родителя и вершины, а также вес этого ребра
-        edge = [parents[self.__end_vertex], self.__end_vertex, self.__matrix[parents[self.__end_vertex]][self.__end_vertex]]
-        
+        edge = [parents[self.__end_vertex], self.__end_vertex,
+                self.__matrix[parents[self.__end_vertex]][self.__end_vertex]]
+
         # далее идем по родителям и записываем их ребра
         i = 0
         while edge[0] != self.__begin_vertex:
-            route.append([edge[0] + 1, edge[1] + 1, edge[2]]) # +1 чтобы было как в тестах
+            route.append([edge[0] + 1, edge[1] + 1, edge[2]])  # +1 чтобы было как в тестах
             edge_copy = edge
             edge = [parents[edge_copy[0]], edge_copy[0], self.__matrix[parents[edge_copy[0]]][edge_copy[0]]]
-            i+=1
+            i += 1
 
         # добавляем последнее ребро, которое не вошло в цикл
         route.append([edge[0] + 1, edge[1] + 1, edge[2]])
@@ -85,5 +85,3 @@ class Graph_Dijkstra:
         route.reverse()
 
         return route
-        
-

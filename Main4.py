@@ -1,7 +1,8 @@
 import argparse
+import time
 
 from task0 import Graph, Output, Strategy
-from task4 import Kruskal
+from task4 import Kruskal, Prima, Boruvka
 
 
 # создание парсера, который будет считывать флаги исходного файла
@@ -63,9 +64,11 @@ if __name__ == '__main__':
         'l': lambda path: Strategy.list_strategy(path)
     }
 
-    # algorithms = {
-    #     'k': SpanningTree.AlgKruskal.spanning_tree(self)
-    # }
+    algorithms = {
+        'k': lambda graph: Kruskal.AlgKruskal(graph),
+        'p': lambda graph: Prima.AlgPrima(graph),
+        'b': lambda graph: Boruvka.AlgBoruvka(graph)
+    }
 
     output = Output.Output()  # создаем экземпляр класса Output из модуля Output
     parser = create_parser()  # создаем парсер
@@ -78,9 +81,22 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[input_flag](path))
         check_file_needed(args.o)
 
-        task4_graph = Kruskal.AlgKruskal(graph)
+        if alg_flag == 's':
+            for function in algorithms.values():
+                algorithm = function(graph)
 
-        output.write(task4_graph.spanning_tree())
+                start = time.time()
+                tree, tree_weight = algorithm.spanning_tree()
+                end = time.time() - start
+
+                output.write(f"Time spent by the {type(algorithm).__name__}: {end}")
+                output.write(f"Minimum spanning tree:\n{tree}")
+                output.write(f"Weight of spanning tree: {tree_weight}\n")
+        else:
+            task4_graph = algorithms[alg_flag](graph)
+            tree, tree_weight = task4_graph.spanning_tree()
+            output.write(f"Minimum spanning tree:\n{tree}")
+            output.write(f"Weight of spanning tree: {tree_weight}")
 
     else:
         print("Было передано неверное количество ключей с параметрами")
