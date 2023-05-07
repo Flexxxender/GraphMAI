@@ -5,14 +5,15 @@ from task0 import Graph, Output, Strategy
 from task4 import Kruskal, Prima, Boruvka
 
 
-# создание парсера, который будет считывать флаги исходного файла
-# и также выходного, если потребуется
+# создание парсера, который будет считывать флаги исходного файла и алгоритмов
+# и также выходного файла, если потребуется
 def create_parser():
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument('-e', default=False)
     argument_parser.add_argument('-m', default=False)
     argument_parser.add_argument('-l', default=False)
     argument_parser.add_argument('-o', default=False)
+
 
     argument_parser.add_argument('-k', action='store_const', const=True, default=False)
     argument_parser.add_argument('-p', action='store_const', const=True, default=False)
@@ -22,7 +23,7 @@ def create_parser():
     return argument_parser
 
 
-# TODO: comments
+# проверка количества аргументов
 def check_num_args(arguments):
     count_input_flags = (arguments.e is not False) + (arguments.m is not False) + \
                         (arguments.l is not False)
@@ -30,6 +31,7 @@ def check_num_args(arguments):
     count_alg_flags = (arguments.k is not False) + (arguments.p is not False) + \
                       (arguments.b is not False) + (arguments.s is not False)
 
+    # проверили, что введен 1 флаг входного файла и 1 флаг алгоритма - находим их
     if count_input_flags == 1 and count_alg_flags == 1:
         path_to_file = ''
         correct_input_flag = 0
@@ -64,6 +66,7 @@ if __name__ == '__main__':
         'l': lambda path: Strategy.list_strategy(path)
     }
 
+    # словарь алгоритмов, где по ключу (флагу) получаем класс нужного алгоритма для графа
     algorithms = {
         'k': lambda graph: Kruskal.AlgKruskal(graph),
         'p': lambda graph: Prima.AlgPrima(graph),
@@ -81,17 +84,21 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[input_flag](path))
         check_file_needed(args.o)
 
+        # если указаг флаг s - запускаем все алгоритмы поочередно
         if alg_flag == 's':
-            for function in algorithms.values():
-                algorithm = function(graph)
+            for algorithm in algorithms.values():
+                task4_graph = algorithm(graph)
 
+                # подсчет времени для алгоритма 
                 start = time.time()
-                tree, tree_weight = algorithm.spanning_tree()
+                tree, tree_weight = task4_graph.spanning_tree()
                 end = time.time() - start
 
-                output.write(f"Time spent by the {type(algorithm).__name__}: {end}")
+                output.write(f"Time spent by the {type(task4_graph).__name__}: {end}")
                 output.write(f"Minimum spanning tree:\n{tree}")
                 output.write(f"Weight of spanning tree: {tree_weight}\n")
+
+        # иначе запускаем только один алгоритм и не считаем время
         else:
             task4_graph = algorithms[alg_flag](graph)
             tree, tree_weight = task4_graph.spanning_tree()
