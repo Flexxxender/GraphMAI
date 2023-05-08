@@ -71,7 +71,7 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[flag](path))
         check_file_needed(args.o)
 
-        task5_graph = Dijkstra.Graph_Dijkstra(graph, args.n, args.d)
+        task5_graph = Dijkstra.GraphDijkstra(graph, args.n, args.d)
 
         if task5_graph.distance == -2:
             output.write("Incorrect data")

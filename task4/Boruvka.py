@@ -4,42 +4,61 @@ class AlgBoruvka:
         self.__matrix = graph.associated_matrix()
         self.__matrix_len = len(self.__matrix)
 
+    # нахождение минимального остовного дерева
     def spanning_tree(self):
         tree = []
-        p, s = self.__init()
-        components = self.__matrix_len
         edges = self.__graph.list_of_edges()
+        parents, size = self.__init_DSU() # инициализация DSU
+        
+        # количество компонент связности, изначально каждая вершина это отдельная компонента
+        components = self.__matrix_len
+        
+        # индекс минимального ребра из каждой компоненты связности
         min_edge = [-1 for i in range(self.__matrix_len)]
-        tree_weight = 0
 
+        # пока не останется одна компонента связности
         while components != 1:
+            # изнаально минимальное ребро для каждой компоненты равно -1
             for i in range(self.__matrix_len):
                 min_edge[i] = -1
 
-            for i, edge in enumerate(edges):
-                if self.__root(edge[0], p) == self.__root(edge[1], p):
+            # перебираем все ребра 
+            for edge in edges:
+                # если ребро соединяет одинаковые компоненты связности - пропускаем
+                if self.__root(edge[0], parents) == self.__root(edge[1], parents):
                     continue
-                r_v = self.__root(edge[0], p)
-                if min_edge[r_v] == -1 or edge[2] < edges[min_edge[r_v]][2]:
-                    min_edge[r_v] = i
-                r_u = self.__root(edge[1], p)
-                if min_edge[r_u] == -1 or edge[2] < edges[min_edge[r_u]][2]:
-                    min_edge[r_u] = i
 
+                # находим лидера вершины v из ребра (v, u) и если минимальное ребро не найдено 
+                # или вес просматриваемого ребра меньше веса минимального ребра - 
+                # запоминаем индекс минимального ребра для leader_v вершины
+                leader_v = self.__root(edge[0], parents)
+                if min_edge[leader_v] == -1 or edge[2] < min_edge[leader_v][2]:
+                    min_edge[leader_v] = edge
+                
+                # аналогично для лидера вершины u из ребра (v, u)
+                leader_u = self.__root(edge[1], parents)
+                if min_edge[leader_u] == -1 or edge[2] < min_edge[leader_u][2]:
+                    min_edge[leader_u] = edge
+
+            # если минимальное ребро найдено - объединяем компоненты, добавляем ребро в дерево
+            # а также количество компонент связности уменьшаем на единицу
             for i in range(self.__matrix_len):
-                if min_edge[i] != -1 and self.__union(edges[min_edge[i]][0], edges[min_edge[i]][1], p, s):
-                    tree.append([edges[min_edge[i]][0] + 1, edges[min_edge[i]][1] + 1, edges[min_edge[i]][2]])
-                    tree_weight += edges[min_edge[i]][2]
+                if min_edge[i] != -1 and self.__union(min_edge[i][0], min_edge[i][1], parents, size):
+                    tree.append([min_edge[i][0] + 1, min_edge[i][1] + 1, min_edge[i][2]])
                     components -= 1
+
+        # подсчет веса полученного дерева
+        tree_weight = sum((tree[i][2] for i in range(len(tree))))
 
         return tree, tree_weight
 
-    def __init(self):
+    # DSU аналогичное алгоритму Краскала с эвристиками сжатия путей и весов деревьев
+    def __init_DSU(self):
         p = [i for i in range(self.__matrix_len)]
-        s = [1 for i in range(self.__matrix_len)]
+        s = [1] * self.__matrix_len
         return p, s
 
-    def __root(self, vertice: int, parent: list) -> int:
+    def __root(self, vertice, parent):
         if parent[vertice] != vertice:
             parent[vertice] = self.__root(parent[vertice], parent)
         return parent[vertice]
