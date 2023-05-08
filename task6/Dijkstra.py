@@ -1,24 +1,20 @@
-class GraphDijkstra:
+class AlgDijkstra:
     # инициализируем граф, матрицу, ее длину, начальную и конечную вершины,
     # а также результат алгоритма - расстояние и путь между вершинами
-    def __init__(self, graph, begin_vertex, end_vertex):
+    def __init__(self, graph, begin_vertex):
         self.__graph = graph
         self.__matrix = self.__graph.adjacency_matrix()
         self.__matrix_len = len(self.__matrix)
         self.__begin_vertex = begin_vertex
-        self.__end_vertex = end_vertex
 
-        self.distance, self.route = self.__dijkstra()
+        self.distance = self.__dijkstra()
 
     # алгоритм Дейкстры
     def __dijkstra(self):
-        if self.__begin_vertex >= self.__matrix_len or self.__end_vertex >= self.__matrix_len or \
-                self.__begin_vertex < 0 or self.__end_vertex < 0:
-            return -2, -2
-
         costs = [1000000] * self.__matrix_len  # массив расстояний до каждой из вершин
         parents = [-1] * self.__matrix_len  # массив родителей для вершин
         visited = []  # массив посещенных в ходе алгоритма вершин
+        count_visited = [0] * self.__matrix_len
 
         # изначально родителем стартовой вершины является она сама и расстояние до неё 0
         costs[self.__begin_vertex] = 0
@@ -29,6 +25,13 @@ class GraphDijkstra:
         while len(visited) != self.__matrix_len:
             # получаем соседей вершины
             neighbours = self.__graph.adjacency_list(self.__matrix, node)
+            visited.append(node)
+
+            # модификация Форда для алгоритма Дейкстры:
+            # если в вершину вошли n раз - значит в графе есть цикл отрицательного веса
+            count_visited[node] += 1
+            if count_visited[node] == self.__matrix_len:
+                return -10
 
             # если через текущую вершину node и ребро (node, neighbours[i)] быстрее дойти,
             # чем до вершины neighbours[i] не через вершину node - перезаписываем расстояние 
@@ -40,17 +43,15 @@ class GraphDijkstra:
                     costs[neighbours[i]] = new_cost
                     parents[neighbours[i]] = node
 
-                    # отмечаем вершину и далее выбираем новую с минимальным расстоянием из не посещенных
-            visited.append(node)
+                    # модификация Форда - если через вершину есть путь короче, 
+                    # значит снимаем метку
+                    if node in visited:
+                        visited.remove(node)
+
+            # далее выбираем новую с минимальным расстоянием из не посещенных
             node = self.__search_min_node(visited, costs)
 
-        if costs[self.__end_vertex] == 1000000:
-            return -1, -1
-
-        # получаем путь от begin_vertex до end_vertex
-        route = self.__get_route(parents)
-
-        return costs[self.__end_vertex], route
+        return costs
 
     # получение соседей с минимальным расстоянием из не посещенных
     def __search_min_node(self, visited, costs):
@@ -62,26 +63,3 @@ class GraphDijkstra:
                 node = i
 
         return node
-
-    # получение пути между начальной и конечной вершинами
-    def __get_route(self, parents):
-        route = []
-
-        # добавляем ребро родителя и вершины, а также вес этого ребра
-        edge = [parents[self.__end_vertex], self.__end_vertex,
-                self.__matrix[parents[self.__end_vertex]][self.__end_vertex]]
-
-        # далее идем по родителям и записываем их ребра
-        i = 0
-        while edge[0] != self.__begin_vertex:
-            route.append([edge[0] + 1, edge[1] + 1, edge[2]])  # +1 чтобы было как в тестах
-            edge_copy = edge
-            edge = [parents[edge_copy[0]], edge_copy[0], self.__matrix[parents[edge_copy[0]]][edge_copy[0]]]
-            i += 1
-
-        # добавляем последнее ребро, которое не вошло в цикл
-        route.append([edge[0] + 1, edge[1] + 1, edge[2]])
-        # реверсируем массив, тк родителей писали в обратном порядке
-        route.reverse()
-
-        return route

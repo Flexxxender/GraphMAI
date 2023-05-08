@@ -31,7 +31,7 @@ class Graph:
     # возвращает список ребер графа / список ребер графа, инцидентных или исходящих из вершины vert
     def list_of_edges(self, vert=None):
         edges = []
-        if not vert:  # ребра для графа
+        if vert is None:  # ребра для графа
             for i in range(self.__matrix_len):
                 for j in range(self.__matrix_len):
                     if self.is_edge(i, j) and i != j:
