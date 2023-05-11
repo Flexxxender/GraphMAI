@@ -13,8 +13,8 @@ class AlgDijkstra:
     def __dijkstra(self):
         costs = [1000000] * self.__matrix_len  # массив расстояний до каждой из вершин
         visited = [False] * self.__matrix_len  # массив посещенных в ходе алгоритма вершин
-        true_visited = 0
-        count_visited = [0] * self.__matrix_len
+        true_visited = 0  # кол-во посещенных вершин
+        count_visited = [0] * self.__matrix_len  # массив, содержащий количество посещений вершин
 
         # изначально расстояние до стартовой вершины 0
         costs[self.__begin_vertex] = 0
