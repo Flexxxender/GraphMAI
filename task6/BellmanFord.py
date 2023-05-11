@@ -19,7 +19,7 @@ class AlgBellmanFord:
         for i in range(self.__matrix_len - 1):
             for edge in edges:
                 costs[edge[1]] = min(costs[edge[1]], costs[edge[0]] + edge[2])
-        
+
         # последняя итерация нужна для проверки на цикл отрицательного веса
         # если даже на V-ой итерации мы можем сократить путь - цикл есть
         for edge in edges:
