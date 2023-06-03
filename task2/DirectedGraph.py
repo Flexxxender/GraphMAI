@@ -8,11 +8,11 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
 
     # проверка на слабую связность графа через BFS из абстрактного класса
     def is_graph_weak_connected(self):
-        return super().is_connected(self.__graph.associated_matrix())
+        return self.is_connected(self.__graph.associated_matrix())
 
     # подсчет и состав слабых компонент связности графа через BFS из абстрактного класса
     def count_weak_connected_components(self):
-        return super().count_connected_components(self.__graph.associated_matrix())
+        return self.count_connected_components(self.__graph.associated_matrix())
 
     # алгоритм Косараджу (Косарайю)
     def kosaraju(self):
@@ -27,7 +27,7 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
 
         # запускаем DFS и удаляем вершины, принадлежащие дереву DFS, повторяем, пока вершины есть
         while len(vertices):
-            dfs_result = super().DFS(vertices[0], counter, counters, self._matrix)
+            dfs_result = self.DFS(vertices[0], counter, counters, self._matrix)
             for vertex in dfs_result:
                 vertices.pop(vertices.index(vertex))
 
@@ -37,7 +37,7 @@ class DirectedGraph(AbstractConnectivity.GraphConnectivity):
 
         # запускаем DFS от вершины, имеющей наиболдьший порядок выхода
         while len(vertices):
-            component = super().DFS(counters.index(max(counters)), counter, counters_copy, transpose_matrix)
+            component = self.DFS(counters.index(max(counters)), counter, counters_copy, transpose_matrix)
 
             # запомнили компоненту и обновили счетчик компонент
             count_components += 1

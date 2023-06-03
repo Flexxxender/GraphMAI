@@ -9,9 +9,9 @@ class UndirectedGraph(AbstractConnectivity.GraphConnectivity):
     # связный ли граф
     def is_graph_connected(self):
         # вызываем метод абстрактного класса, работающий через BFS
-        return super().is_connected(self._matrix)
+        return self.is_connected(self._matrix)
 
     # подсчет и состав компонент связности графа
     def count_graph_connected_components(self):
         # вызываем метод абстрактного класса, работающий через BFS
-        return super().count_connected_components(self._matrix)
+        return self.count_connected_components(self._matrix)

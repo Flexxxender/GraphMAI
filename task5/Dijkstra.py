@@ -66,21 +66,13 @@ class GraphDijkstra:
     # получение пути между начальной и конечной вершинами
     def __get_route(self, parents):
         route = []
+        vertex = self.__end_vertex
 
-        # добавляем ребро родителя и вершины, а также вес этого ребра
-        edge = [parents[self.__end_vertex], self.__end_vertex,
-                self.__matrix[parents[self.__end_vertex]][self.__end_vertex]]
+        # идем по родителям от конечной вершины
+        while vertex != self.__begin_vertex:
+            route.append([parents[vertex], vertex, self.__graph.weight(parents[vertex], vertex)])
+            vertex = parents[vertex]
 
-        # далее идем по родителям и записываем их ребра
-        i = 0
-        while edge[0] != self.__begin_vertex:
-            route.append([edge[0] + 1, edge[1] + 1, edge[2]])  # +1 чтобы было как в тестах
-            edge_copy = edge
-            edge = [parents[edge_copy[0]], edge_copy[0], self.__matrix[parents[edge_copy[0]]][edge_copy[0]]]
-            i += 1
-
-        # добавляем последнее ребро, которое не вошло в цикл
-        route.append([edge[0] + 1, edge[1] + 1, edge[2]])
         # реверсируем массив, тк родителей писали в обратном порядке
         route.reverse()
 
