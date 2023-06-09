@@ -52,3 +52,15 @@ def list_strategy(path):
             matrix[current_row][elem - 1] = 1  # ( i-1;j-1) ребро с весом 1
         current_row += 1
     return matrix
+
+
+# входные данные - матрица смежности (для алгоритма а-стар)
+def a_star_matrix_strategy(path):
+    with open(path, "r") as file:
+        matrix = []
+
+        # прочитали матрицу смежности
+        for line in file:
+            matrix.append([int(s) for s in line.split()])
+
+    return matrix

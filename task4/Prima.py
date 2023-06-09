@@ -8,10 +8,10 @@ class AlgPrima:
     def spanning_tree(self):
         tree = []
         edges = self.__graph.list_of_edges()
-        edges.sort(key=lambda edge: edge[2]) # нашли и отортировали все ребра графа по весу
-        vertices = [0] * self.__matrix_len # массив посещенных вершин, изначально ни одну мы не посетили
-        vertices[0] = 1 # посетили первую, с которой все начнем
-        edge_adj = [] # смежное ребро, которое будем каждый раз добавлять
+        edges.sort(key=lambda edge: edge[2])  # нашли и отортировали все ребра графа по весу
+        vertices = [0] * self.__matrix_len  # массив посещенных вершин, изначально ни одну мы не посетили
+        vertices[0] = 1  # посетили первую, с которой все начнем
+        edge_adj = []  # смежное ребро, которое будем каждый раз добавлять
 
         # пока все вершины не посещены или все ребра не обработаны
         while min(vertices) != 1 and len(edges):

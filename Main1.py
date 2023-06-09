@@ -74,6 +74,7 @@ if __name__ == '__main__':
             # по нашему графу получаем матрицу достижимости, смежности, а также
             # сможем дальше работать по заданию с графом
             task1_graph = Task1.GraphFeatures(graph)
+            task2_graph = Task1.GraphFeatures(graph)
 
             check_file_needed(args.o)
 
