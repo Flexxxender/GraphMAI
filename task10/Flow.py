@@ -1,5 +1,6 @@
 import copy
 
+
 class FindMaxFlow:
     def __init__(self, graph):
         self.__graph = graph
@@ -8,11 +9,11 @@ class FindMaxFlow:
         self.__source = self.__find_source()
         self.__sink = self.__find_sink()
         self.flow_matrix, self.max_flow = self.__edmonds_karp()
-
+    #TODO: property
     # геттер для источника
     def get_source(self):
         return self.__source
-    
+
     # геттер для стока
     def get_sink(self):
         return self.__sink
@@ -21,7 +22,7 @@ class FindMaxFlow:
     def __edmonds_karp(self):
         result = copy.deepcopy(self.__matrix)
         ost = copy.deepcopy(self.__matrix)
-        
+
         while True:
             # пока путь от истока до стока существует
             way = self.__BFS(ost)
@@ -29,14 +30,14 @@ class FindMaxFlow:
                 break
 
             # получаем пропускную способность дуги
-            way.sort(key=lambda edge:edge[2])
+            way.sort(key=lambda edge: edge[2])
             min_edge = way[0][2]
 
             # обновляем матрицу пропускных способностей
             for edge in way:
                 ost[edge[0]][edge[1]] -= min_edge
                 ost[edge[1]][edge[0]] += min_edge
-        
+
         # результирующую матрицу получаем как разность изначальной матрицы и остаточных пропускных способностей
         # в изначальной матрице записаны пропускные способности ребер, а в ost - остаточные пропускные способности
         for i in range(self.__matrix_len):
@@ -54,20 +55,20 @@ class FindMaxFlow:
 
     # BFS для нахождения дополняющей цепи
     def __BFS(self, matrix):
-        queue = [self.__source] # очередь, в которой изначально только источник
-        is_sink = False # флаг остановки, если дошли до стока
-        
-        visited = [False] * self.__matrix_len # массив посещенных вершин
+        queue = [self.__source]  # очередь, в которой изначально только источник
+        is_sink = False  # флаг остановки, если дошли до стока
+
+        visited = [False] * self.__matrix_len  # массив посещенных вершин
         visited[self.__source] = True
 
-        parents = [-1] * self.__matrix_len # массив родителей для каждой вершины
+        parents = [-1] * self.__matrix_len  # массив родителей для каждой вершины
         parents[self.__source] = self.__source
-        
+
         while len(queue):
             # берем вершину из очереди и смотрим ее соседей
-            current_vertex = queue.pop(0)  
-            neighbours = self.__graph.adjacency_list(self.__matrix,current_vertex)
-            
+            current_vertex = queue.pop(0)
+            neighbours = self.__graph.adjacency_list(self.__matrix, current_vertex)
+
             for neighbour in neighbours:
                 # если сосед еще не посещен и еще можно пропустить поток
                 if matrix[current_vertex][neighbour] != 0 and not visited[neighbour]:
@@ -85,9 +86,9 @@ class FindMaxFlow:
         # критерий остановки - если все еще не дошли до стока
         if not is_sink:
             return -1
-        
+
         # возвращаем дополняющую цепь
-        return self.__get_route_for_BFS(parents, matrix)    
+        return self.__get_route_for_BFS(parents, matrix)
 
     # получение дополнящей цепи минимального количества ребер
     def __get_route_for_BFS(self, parents, matrix):
@@ -114,7 +115,7 @@ class FindMaxFlow:
             if is_source:
                 return i
         return -1
-    
+
     # нахождение стока в сети (вершина, из которой ничего не выходит)
     def __find_sink(self):
         for i in range(self.__matrix_len):
