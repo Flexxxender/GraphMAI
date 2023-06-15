@@ -20,7 +20,7 @@ class ShortestPath:
         # пока текущая вершина не равна конечной
         while current_cell.x != end_cell.x or current_cell.y != end_cell.y:
             # нахождение следующей вершины с минимальным расстоянием из доступных
-            current_cell = self.find_min_cell(open_cells)
+            current_cell = self.__find_min_cell(open_cells)
             # убираем вершину из доступных и кладем в обработанные
             open_cells.remove(current_cell)
             closed_cells.append(current_cell)
@@ -29,10 +29,10 @@ class ShortestPath:
             neighbours = self.__map.neighbours(current_cell)
             for neighbour in neighbours:
                 # если сосед уже обработан - пропускаем
-                if self.in_array(neighbour, closed_cells) != -1:
+                if self.__in_array(neighbour, closed_cells) != -1:
                     continue
 
-                new_cell = self.in_array(neighbour, open_cells)
+                new_cell = self.__in_array(neighbour, open_cells)
                 # если сосед в доступных клетках
                 if new_cell != -1:
                     # пересчитываем расстояние до старта у соседа
@@ -53,7 +53,7 @@ class ShortestPath:
                     open_cells.append(neighbour)
 
         # получение пути, длины пути, а также процент просмотренных алгоритмом клеток от общего их числа
-        path = self.get_path(begin_cell, current_cell)
+        path = self.__get_path(begin_cell, current_cell)
         length_path = current_cell.distance_from_start
         percent = len(closed_cells) / math.pow(self.__map.matrix_len, 2) * 100
 
@@ -61,7 +61,7 @@ class ShortestPath:
 
     # есть ли элемент в массиве
     @staticmethod
-    def in_array(u: Cell, array: [Cell]):
+    def __in_array(u: Cell, array: [Cell]):
         for index, cell in enumerate(array):
             if u.x == cell.x and u.y == cell.y:
                 return cell
@@ -69,7 +69,7 @@ class ShortestPath:
 
     # найти следующую клетку с минимальным полным расстоянием
     @staticmethod
-    def find_min_cell(open_cells: [Cell]):
+    def __find_min_cell(open_cells: [Cell]):
         minimum = 1000000000
         min_i = -1
         for index, cell in enumerate(open_cells):
@@ -80,7 +80,7 @@ class ShortestPath:
 
     # восстановление маршрута
     @staticmethod
-    def get_path(begin_cell: Cell, end_cell: Cell):
+    def __get_path(begin_cell: Cell, end_cell: Cell):
         path = [end_cell]
         cell = end_cell
         # идем с последней клетки и по родителям - затем реверсируем массив
