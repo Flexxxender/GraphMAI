@@ -1,6 +1,6 @@
 import argparse
-from task0 import Graph, Output, Strategy
-from task10 import Flow
+from task0 import ModifiedGraph, Output, Strategy
+from task11 import Matching
 
 
 # создание парсера, который будет считывать флаги исходного файла
@@ -64,16 +64,21 @@ if __name__ == '__main__':
 
     if (path, flag) != (False, False):
         check_file_needed(args.o)
-        graph = Graph.Graph(strategies[flag](path))
-        task10_graph = Flow.FindMaxFlow(graph)
+        graph = ModifiedGraph.ModifiedGraph(strategies[flag](path))
+        task11_graph = Matching.Matching(graph)
+        
+        matching = task11_graph.find_max_matching()
+        if matching == -1:
+            output.write("Graph is not bipartite")
+        else:
+            output.write("Graph is bipartite")
+            output.write("Matching:")
+            for i in range(len(matching)):
+                for j in range(len(matching)):
+                    if matching[i][j] == 1:
+                        output.write(f"{i + 1} - {j + 1}")
 
-        source = task10_graph.source
-        sink = task10_graph.sink
-        output.write(f"{task10_graph.max_flow} - maximum flow from {source + 1} to {sink + 1}.")
-        for i in range(len(graph.adjacency_matrix())):
-            for j in range(len(graph.adjacency_matrix())):
-                if task10_graph.flow_matrix[i][j] != 1000000:
-                    output.write(f"{i + 1} {j + 1} {task10_graph.flow_matrix[i][j]}/{graph.adjacency_matrix()[i][j]}")
+
 
     else:
         print("Было передано неверное количество ключей с параметрами")

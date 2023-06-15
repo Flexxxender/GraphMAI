@@ -8,18 +8,20 @@ class FindMaxFlow:
         self.__matrix_len = len(self.__matrix)
         self.__source = self.__find_source()
         self.__sink = self.__find_sink()
-        self.flow_matrix, self.max_flow = self.__edmonds_karp()
-    #TODO: property
+        self.flow_matrix, self.max_flow = self._edmonds_karp()
+
     # геттер для источника
-    def get_source(self):
+    @property
+    def source(self):
         return self.__source
 
     # геттер для стока
-    def get_sink(self):
+    @property
+    def sink(self):
         return self.__sink
 
     # алгоритм Эдмондса-Карпа
-    def __edmonds_karp(self):
+    def _edmonds_karp(self):
         result = copy.deepcopy(self.__matrix)
         ost = copy.deepcopy(self.__matrix)
 
@@ -28,11 +30,9 @@ class FindMaxFlow:
             way = self.__BFS(ost)
             if way == -1:
                 break
-
             # получаем пропускную способность дуги
             way.sort(key=lambda edge: edge[2])
             min_edge = way[0][2]
-
             # обновляем матрицу пропускных способностей
             for edge in way:
                 ost[edge[0]][edge[1]] -= min_edge
@@ -67,7 +67,7 @@ class FindMaxFlow:
         while len(queue):
             # берем вершину из очереди и смотрим ее соседей
             current_vertex = queue.pop(0)
-            neighbours = self.__graph.adjacency_list(self.__matrix, current_vertex)
+            neighbours = self.__graph.adjacency_list(matrix, current_vertex)
 
             for neighbour in neighbours:
                 # если сосед еще не посещен и еще можно пропустить поток
