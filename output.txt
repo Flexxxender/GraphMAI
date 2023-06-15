@@ -1,24 +1,5 @@
-﻿Manhattan distance
-129 - length of path between (14, 2) and (21, 22) points.
-Path:
-(14, 2) (14, 3) (13, 3) (13, 4) (13, 5) (13, 6) (13, 7) (13, 8) (13, 9) (14, 9) (15, 9) (16, 9) (16, 10) (16, 11) (16, 12) (16, 13) (16, 14) (16, 15) (16, 16) (16, 17) (16, 18) (16, 19) (17, 19) (17, 20) (18, 20) (19, 20) (20, 20) (21, 20) (21, 21) (21, 22) 
-percent viewing algorithmic cells of their total number: 97.6
-
-Chebyshev distance
-129 - length of path between (14, 2) and (21, 22) points.
-Path:
-(14, 2) (14, 3) (13, 3) (13, 4) (13, 5) (13, 6) (13, 7) (13, 8) (13, 9) (13, 10) (13, 11) (13, 12) (13, 13) (13, 14) (14, 14) (15, 14) (16, 14) (16, 15) (16, 16) (16, 17) (16, 18) (16, 19) (17, 19) (17, 20) (18, 20) (19, 20) (20, 20) (21, 20) (21, 21) (21, 22) 
-percent viewing algorithmic cells of their total number: 97.76
-
-Euclidean distance
-129 - length of path between (14, 2) and (21, 22) points.
-Path:
-(14, 2) (14, 3) (13, 3) (13, 4) (13, 5) (13, 6) (13, 7) (13, 8) (13, 9) (13, 10) (13, 11) (13, 12) (13, 13) (13, 14) (14, 14) (15, 14) (16, 14) (16, 15) (16, 16) (16, 17) (16, 18) (16, 19) (17, 19) (17, 20) (18, 20) (19, 20) (20, 20) (21, 20) (21, 21) (21, 22) 
-percent viewing algorithmic cells of their total number: 97.76
-
-Without heuristic
-129 - length of path between (14, 2) and (21, 22) points.
-Path:
-(14, 2) (14, 3) (13, 3) (13, 4) (13, 5) (13, 6) (13, 7) (13, 8) (13, 9) (13, 10) (13, 11) (14, 11) (14, 12) (15, 12) (15, 13) (15, 14) (16, 14) (16, 15) (16, 16) (16, 17) (16, 18) (16, 19) (17, 19) (17, 20) (18, 20) (19, 20) (20, 20) (21, 20) (21, 21) (21, 22) 
-percent viewing algorithmic cells of their total number: 97.92
-
+﻿Graph is bipartite
+Matching:
+3 - 1
+6 - 2
+8 - 7
