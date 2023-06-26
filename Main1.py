@@ -91,6 +91,7 @@ if __name__ == '__main__':
             # вывод матрицы достижимости, эксцентриситетов, диаметра, радиуса,
             # центральных и периферийных вершин
             output.write("Distances:")
+
             output.write('\n'.join(map(str, task1_graph.distance_matrix())), end='\n\n')
             output.write(f"Eccentricity:\n{task1_graph.eccentricity()}")
             output.write(f"D = {task1_graph.diameter()}")

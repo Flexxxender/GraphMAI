@@ -18,7 +18,7 @@ class ShortestPath:
         current_cell.full_distance = 0
 
         # пока текущая вершина не равна конечной
-        while current_cell.x != end_cell.x or current_cell.y != end_cell.y:
+        while current_cell != end_cell:
             # нахождение следующей вершины с минимальным расстоянием из доступных
             current_cell = self.__find_min_cell(open_cells)
             # убираем вершину из доступных и кладем в обработанные
@@ -29,12 +29,12 @@ class ShortestPath:
             neighbours = self.__map.neighbours(current_cell)
             for neighbour in neighbours:
                 # если сосед уже обработан - пропускаем
-                if self.__in_array(neighbour, closed_cells) != -1:
+                if self.__in_array(neighbour, closed_cells) != Cell(-1, -1):
                     continue
 
                 new_cell = self.__in_array(neighbour, open_cells)
                 # если сосед в доступных клетках
-                if new_cell != -1:
+                if new_cell != Cell(-1, -1):
                     # пересчитываем расстояние до старта у соседа
                     new_start_distance = current_cell.distance_from_start + \
                                          self.__map.distance(current_cell, new_cell)
@@ -62,10 +62,10 @@ class ShortestPath:
     # есть ли элемент в массиве
     @staticmethod
     def __in_array(u: Cell, array: [Cell]):
-        for index, cell in enumerate(array):
-            if u.x == cell.x and u.y == cell.y:
+        for cell in array:
+            if u == cell:
                 return cell
-        return -1
+        return Cell(-1, -1)
 
     # найти следующую клетку с минимальным полным расстоянием
     @staticmethod
@@ -84,7 +84,7 @@ class ShortestPath:
         path = [end_cell]
         cell = end_cell
         # идем с последней клетки и по родителям - затем реверсируем массив
-        while cell.x != begin_cell.x or cell.y != begin_cell.y:
+        while cell != begin_cell:
             cell = cell.parent
             path.append(cell)
         path.reverse()

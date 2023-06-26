@@ -67,9 +67,9 @@ if __name__ == '__main__':
 
     # словарь алгоритмов, где по ключу (флагу) получаем класс нужного алгоритма для графа
     algorithms = {
-        'd': lambda graph, arg: Dijkstra.AlgDijkstra(graph, arg),
-        't': lambda graph, arg: Levit.AlgLevit(graph, arg),
-        'b': lambda graph, arg: BellmanFord.AlgBellmanFord(graph, arg)
+        'd': lambda graph: Dijkstra.AlgDijkstra(graph),
+        't': lambda graph: Levit.AlgLevit(graph),
+        'b': lambda graph: BellmanFord.AlgBellmanFord(graph)
     }
 
     output = Output.Output()  # создаем экземпляр класса Output из модуля Output
@@ -82,15 +82,18 @@ if __name__ == '__main__':
 
         graph = Graph.Graph(strategies[input_flag](path))
         check_file_needed(args.o)
-        task6_graph = algorithms[alg_flag](graph, args.n)
+        task6_graph = algorithms[alg_flag](graph)
+        distances = task6_graph.distances(args.n)
 
-        if task6_graph.distance == -10:
-            output.write(f"Graph contains a negative cycle.")
+        if distances == -1:
+            output.write("Incorrect data")
+        elif distances == -10:
+            output.write("Graph contains a negative cycle.")
         else:
             output.write("Graph does not contain edges with negative weight")
             output.write("Shortest paths lengths:")
 
-            for index, distance in enumerate(task6_graph.distance):
+            for index, distance in enumerate(distances):
                 if index != args.n:
                     output.write(f"{args.n + 1} - {index + 1}: {distance if distance != 1000000 else 'inf'}")
 

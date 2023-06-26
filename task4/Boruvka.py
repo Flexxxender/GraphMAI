@@ -1,25 +1,25 @@
 class AlgBoruvka:
     def __init__(self, graph):
-        self.__graph = graph
-        self.__matrix = graph.associated_matrix()
-        self.__matrix_len = len(self.__matrix)
+        self._graph = graph
+        self._matrix = graph.associated_matrix()
+        self._matrix_len = len(self._matrix)
 
     # нахождение минимального остовного дерева
     def spanning_tree(self):
         tree = []
-        edges = self.__graph.list_of_edges()
-        parents, size = self.__init_DSU() # инициализация DSU
-        
+        edges = self._graph.list_of_edges()
+        parents, size = self.__init_DSU()  # инициализация DSU
+
         # количество компонент связности, изначально каждая вершина это отдельная компонента
-        components = self.__matrix_len
-        
+        components = self._matrix_len
+
         # индекс минимального ребра из каждой компоненты связности
-        min_edge = [-1 for i in range(self.__matrix_len)]
+        min_edge = [-1 for i in range(self._matrix_len)]
 
         # пока не останется одна компонента связности
         while components != 1:
             # изнаально минимальное ребро для каждой компоненты равно -1
-            for i in range(self.__matrix_len):
+            for i in range(self._matrix_len):
                 min_edge[i] = -1
 
             # перебираем все ребра 
@@ -34,7 +34,7 @@ class AlgBoruvka:
                 leader_v = self.__root(edge[0], parents)
                 if min_edge[leader_v] == -1 or edge[2] < min_edge[leader_v][2]:
                     min_edge[leader_v] = edge
-                
+
                 # аналогично для лидера вершины u из ребра (v, u)
                 leader_u = self.__root(edge[1], parents)
                 if min_edge[leader_u] == -1 or edge[2] < min_edge[leader_u][2]:
@@ -42,7 +42,7 @@ class AlgBoruvka:
 
             # если минимальное ребро найдено - объединяем компоненты, добавляем ребро в дерево
             # а также количество компонент связности уменьшаем на единицу
-            for i in range(self.__matrix_len):
+            for i in range(self._matrix_len):
                 if min_edge[i] != -1 and self.__union(min_edge[i][0], min_edge[i][1], parents, size):
                     tree.append([min_edge[i][0] + 1, min_edge[i][1] + 1, min_edge[i][2]])
                     components -= 1
@@ -54,8 +54,8 @@ class AlgBoruvka:
 
     # DSU аналогичное алгоритму Краскала с эвристиками сжатия путей и весов деревьев
     def __init_DSU(self):
-        p = [i for i in range(self.__matrix_len)]
-        s = [1] * self.__matrix_len
+        p = [i for i in range(self._matrix_len)]
+        s = [1] * self._matrix_len
         return p, s
 
     def __root(self, vertice, parent):

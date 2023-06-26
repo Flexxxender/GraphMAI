@@ -67,8 +67,11 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[flag](path))
         task10_graph = Flow.FindMaxFlow(graph)
 
-        source = task10_graph.get_source()
-        sink = task10_graph.get_sink()
+        if task10_graph.flow_matrix == -1:
+            output.write("There is now sink or source")
+
+        source = task10_graph.source
+        sink = task10_graph.sink
         output.write(f"{task10_graph.max_flow} - maximum flow from {source + 1} to {sink + 1}.")
         for i in range(len(graph.adjacency_matrix())):
             for j in range(len(graph.adjacency_matrix())):

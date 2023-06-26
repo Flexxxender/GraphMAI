@@ -1,28 +1,27 @@
 class AlgDijkstra:
-    # инициализируем граф, матрицу, ее длину, начальную и конечную вершины,
-    # а также результат алгоритма - расстояние и путь между вершинами
-    def __init__(self, graph, begin_vertex):
-        self.__graph = graph
-        self.__matrix = self.__graph.adjacency_matrix()
-        self.__matrix_len = len(self.__matrix)
-        self.__begin_vertex = begin_vertex
-
-        self.distance = self.__dijkstra()
+    # инициализируем граф, матрицу, ее длину, вершину
+    def __init__(self, graph):
+        self._graph = graph
+        self._matrix = self._graph.adjacency_matrix()
+        self._matrix_len = len(self._matrix)
 
     # алгоритм Дейкстры
-    def __dijkstra(self):
-        costs = [1000000] * self.__matrix_len  # массив расстояний до каждой из вершин
-        visited = [False] * self.__matrix_len  # массив посещенных в ходе алгоритма вершин
+    def distances(self, begin_vertex):
+        if begin_vertex < 0 or begin_vertex > self._matrix_len:
+            return -1
+
+        costs = [1000000] * self._matrix_len  # массив расстояний до каждой из вершин
+        visited = [False] * self._matrix_len  # массив посещенных в ходе алгоритма вершин
         true_visited = 0  # кол-во посещенных вершин
-        count_visited = [0] * self.__matrix_len  # массив, содержащий количество посещений вершин
+        count_visited = [0] * self._matrix_len  # массив, содержащий количество посещений вершин
 
         # изначально расстояние до стартовой вершины 0
-        costs[self.__begin_vertex] = 0
+        costs[begin_vertex] = 0
 
         # пока не посетили все вершины
-        while true_visited != self.__matrix_len:
+        while true_visited != self._matrix_len:
             # выбираем вершину с минимальным расстоянием из не посещенных
-            node = self.__search_min_node(visited, costs)
+            node = self._search_min_node(visited, costs)
             if node == -1:
                 break
 
@@ -30,11 +29,11 @@ class AlgDijkstra:
             true_visited += 1
             count_visited[node] += 1
             # получаем соседей вершины
-            neighbours = self.__graph.adjacency_list(self.__matrix, node)
+            neighbours = self._graph.adjacency_list(self._matrix, node)
             # если через текущую вершину node и ребро (node, neighbours[i)] быстрее дойти,
             # чем до вершины neighbours[i] не через вершину node - перезаписываем расстояние
             for neighbour in neighbours:
-                new_cost = costs[node] + self.__matrix[node][neighbour]
+                new_cost = costs[node] + self._matrix[node][neighbour]
                 if new_cost < costs[neighbour]:
                     costs[neighbour] = new_cost
                     # модификация Форда - если через вершину есть путь короче, 
@@ -46,16 +45,16 @@ class AlgDijkstra:
             # модификация Форда для алгоритма Дейкстры:
             # если в вершину вошли n раз - значит в графе есть цикл отрицательного веса
             for count in count_visited:
-                if count == self.__matrix_len:
+                if count == self._matrix_len:
                     return -10
 
         return costs
 
     # получение соседей с минимальным расстоянием из не посещенных
-    def __search_min_node(self, visited, costs):
+    def _search_min_node(self, visited, costs):
         min_cost = 1000001
         node = -1
-        for i in range(self.__matrix_len):
+        for i in range(self._matrix_len):
             if not visited[i] and costs[i] < min_cost:
                 min_cost = costs[i]
                 node = i

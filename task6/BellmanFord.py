@@ -1,22 +1,21 @@
 class AlgBellmanFord:
-    # инициализируем граф, матрицу, ее длину, начальную и конечную вершины,
-    # а также результат алгоритма - расстояние и путь между вершинами
-    def __init__(self, graph, begin_vertex):
-        self.__graph = graph
-        self.__matrix = self.__graph.adjacency_matrix()
-        self.__matrix_len = len(self.__matrix)
-        self.__begin_vertex = begin_vertex
-
-        self.distance = self.__bellman_ford()
+    # инициализируем граф, матрицу, ее длину, вершину
+    def __init__(self, graph):
+        self._graph = graph
+        self._matrix = self._graph.adjacency_matrix()
+        self._matrix_len = len(self._matrix)
 
     # алгоритм Беллмана-Форда
-    def __bellman_ford(self):
-        costs = [1000000] * self.__matrix_len  # массив расстояний до каждой из вершин
-        costs[self.__begin_vertex] = 0 # изначально расстояние до стартовой вершины = 0
-        edges = self.__graph.list_of_edges()
+    def distances(self, begin_vertex):
+        if begin_vertex < 0 or begin_vertex > self._matrix_len:
+            return -1
+
+        costs = [1000000] * self._matrix_len  # массив расстояний до каждой из вершин
+        costs[begin_vertex] = 0  # изначально расстояние до стартовой вершины = 0
+        edges = self._graph.list_of_edges()
 
         # |V-1| раз повторяем, что если через ребро идти выгоднее
-        for i in range(self.__matrix_len - 1):
+        for i in range(self._matrix_len - 1):
             for edge in edges:
                 costs[edge[1]] = min(costs[edge[1]], costs[edge[0]] + edge[2])
 
@@ -25,7 +24,5 @@ class AlgBellmanFord:
         for edge in edges:
             if costs[edge[1]] > costs[edge[0]] + edge[2]:
                 return -10
-        
-        return costs
 
-        
+        return costs

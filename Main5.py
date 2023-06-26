@@ -71,15 +71,16 @@ if __name__ == '__main__':
         graph = Graph.Graph(strategies[flag](path))
         check_file_needed(args.o)
 
-        task5_graph = Dijkstra.GraphDijkstra(graph, args.n, args.d)
+        task5_graph = Dijkstra.GraphDijkstra(graph)
+        distance, route = task5_graph.dijkstra(args.n, args.d)
 
-        if task5_graph.distance == -2:
+        if distance == -2:
             output.write("Incorrect data")
-        elif task5_graph.distance == -1:
+        elif distance == -1:
             output.write(f"There is no path between the vertices {args.n + 1} and {args.d + 1}.")
         else:
-            output.write(f"Shortest path length between {args.n + 1} and {args.d + 1} vertices: {task5_graph.distance}")
-            output.write(f"Path: {task5_graph.route}")
+            output.write(f"Shortest path length between {args.n + 1} and {args.d + 1} vertices: {distance}")
+            output.write(f"Path: {route}")
 
     else:
         print("Было передано неверное количество ключей с параметрами")

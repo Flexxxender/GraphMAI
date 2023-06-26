@@ -3,8 +3,8 @@ from task8.Cell import Cell
 
 class Map:
     def __init__(self, matrix):
-        self.__matrix = matrix
-        self.matrix_len = len(self.__matrix)
+        self._matrix = matrix
+        self.matrix_len = len(self._matrix)
 
     # получить соседей вершины
     def neighbours(self, cell: Cell) -> [Cell]:
@@ -17,7 +17,7 @@ class Map:
             neighbour_cords = [cell.x + step[0], cell.y + step[1]]
             if neighbour_cords[0] < 0 or neighbour_cords[1] < 0:
                 continue
-            if neighbour_cords[0] >= len(self.__matrix) or neighbour_cords[1] >= len(self.__matrix):
+            if neighbour_cords[0] >= len(self._matrix) or neighbour_cords[1] >= len(self._matrix):
                 continue
             neighbours.append(Cell(neighbour_cords[0], neighbour_cords[1]))
 
@@ -29,4 +29,4 @@ class Map:
 
     # индексатор (почти)
     def height(self, x, y):
-        return self.__matrix[x][y]
+        return self._matrix[x][y]

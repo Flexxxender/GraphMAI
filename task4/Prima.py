@@ -1,15 +1,15 @@
 class AlgPrima:
     def __init__(self, graph):
-        self.__graph = graph
-        self.__matrix = graph.associated_matrix()
-        self.__matrix_len = len(self.__matrix)
+        self._graph = graph
+        self._matrix = graph.associated_matrix()
+        self._matrix_len = len(self._matrix)
 
     # нахождение минимального остовного дерева
     def spanning_tree(self):
         tree = []
-        edges = self.__graph.list_of_edges()
+        edges = self._graph.list_of_edges()
         edges.sort(key=lambda edge: edge[2])  # нашли и отортировали все ребра графа по весу
-        vertices = [0] * self.__matrix_len  # массив посещенных вершин, изначально ни одну мы не посетили
+        vertices = [0] * self._matrix_len  # массив посещенных вершин, изначально ни одну мы не посетили
         vertices[0] = 1  # посетили первую, с которой все начнем
         edge_adj = []  # смежное ребро, которое будем каждый раз добавлять
 

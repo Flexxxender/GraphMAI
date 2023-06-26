@@ -11,9 +11,10 @@ class Graph:
     def weight(self, vertI, vertJ):
         return self._matrix[vertI][vertJ]
 
+    @staticmethod
     # возвращает true, если ребро между вершинами i и j существует, иначе false
-    def is_edge(self, vertI, vertJ):
-        return self._matrix[vertI][vertJ] != 1000000
+    def is_edge(matrix, vertI, vertJ):
+        return matrix[vertI][vertJ] != 1000000
 
     # возвращает матрицу смежности графа (копию, чтобы избежать ее изменения в классе графа)
     def adjacency_matrix(self):
@@ -34,13 +35,13 @@ class Graph:
         if vert is None:  # ребра для графа
             for i in range(self._matrix_len):
                 for j in range(self._matrix_len):
-                    if self.is_edge(i, j) and i != j:
+                    if self.is_edge(self._matrix, i, j) and i != j:
                         edges.append([i, j, self._matrix[i][j]])
         else:  # ребра для вершины
             for j in range(self._matrix_len):
-                if self.is_edge(vert, j) and vert != j:
+                if self.is_edge(self._matrix, vert, j) and vert != j:
                     edges.append([vert, j, self._matrix[vert][j]])
-                if self.is_edge(j, vert) and vert != j:
+                if self.is_edge(self._matrix, j, vert) and vert != j:
                     edges.append([j, vert, self._matrix[j][vert]])
         return edges
 
@@ -58,7 +59,7 @@ class Graph:
 
         for i in range(self._matrix_len):
             for j in range(self._matrix_len):
-                if self.is_edge(i, j):
+                if self.is_edge(self._matrix, i, j):
                     associated_matrix[j][i] = associated_matrix[i][j]
 
         return associated_matrix
