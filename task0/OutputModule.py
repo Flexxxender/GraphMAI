@@ -16,3 +16,12 @@ class Output:
                 print(*values, file=file, sep=sep, end=end)
         else:
             print(*values, sep=sep, end=end)
+
+    # проверка на нужду выходного файла
+    def check_file_needed(self, arg_o):
+        if arg_o:
+            # если файл нужен - меняем поток вывода из консоли на файл
+            self.switch_to_file_output(arg_o)
+            # очищаем файл путем открытия его для записи перед основной работой
+            with open(arg_o, "w") as file:
+                file.write("")

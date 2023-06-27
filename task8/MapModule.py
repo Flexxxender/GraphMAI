@@ -1,4 +1,4 @@
-from task8.Cell import Cell
+from task8.CellModule import Cell
 
 
 class Map:

@@ -1,7 +1,6 @@
 import math
-
-from task8.Cell import Cell
-from task8.Map import Map
+from task8.CellModule import Cell
+from task8.MapModule import Map
 
 
 class ShortestPath:

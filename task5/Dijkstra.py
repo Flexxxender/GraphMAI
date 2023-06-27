@@ -66,7 +66,7 @@ class GraphDijkstra:
 
         # идем по родителям от конечной вершины
         while vertex != begin_vertex:
-            route.append([parents[vertex], vertex, self._graph.weight(parents[vertex], vertex)])
+            route.append([parents[vertex] + 1, vertex + 1, self._graph.weight(parents[vertex], vertex)])
             vertex = parents[vertex]
 
         # реверсируем массив, тк родителей писали в обратном порядке

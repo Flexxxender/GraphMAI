@@ -12,7 +12,7 @@ class AntColony:
         self._graph = graph
         self._matrix = self._graph.adjacency_matrix()
         self.pheromones = [[1 if i != j else 0 for i in range(len(self._matrix))] for j in range(len(self._matrix))]
-        self.q = sum(self._matrix[0][i] for i in range(len(self._matrix))) # пропорционально длине пути
+        self.q = sum(self._matrix[0][i] for i in range(len(self._matrix)))  # пропорционально длине пути
 
     def ant_colony(self, begin_vertex):
         res = []
@@ -39,7 +39,7 @@ class AntColony:
 
                     denominator = sum(self.desire(current, n) for n in neighbours)
                     # находим вероятности перехода в соседние города
-                    probabilities = [self.desire(current, n)/denominator for n in neighbours]
+                    probabilities = [self.desire(current, n) / denominator for n in neighbours]
                     for j in range(1, len(probabilities)):
                         probabilities[j] += probabilities[j - 1]
 
@@ -59,7 +59,7 @@ class AntColony:
             # испаряем феромон
             for i in range(len(self.pheromones)):
                 for j in range(len(self.pheromones)):
-                    self.pheromones[i][j] = self.pheromones[i][j] * (1-self.p)
+                    self.pheromones[i][j] = self.pheromones[i][j] * (1 - self.p)
 
             # обновляем феромоны
             for path in pathes:
@@ -73,7 +73,7 @@ class AntColony:
         visited = [False] * len(self._matrix)
         visited[current] = True
         k = 1
-        while  k != len(self._matrix):
+        while k != len(self._matrix):
             max_i = -1
             max = -1000000
             # идем от начальной вершины по максимальному феромонному следу

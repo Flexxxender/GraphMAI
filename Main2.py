@@ -1,96 +1,55 @@
-import argparse
-
-from task0 import Graph, Output, Strategy
+from task0 import GraphModule, OutputModule, Strategy, ParserModule
 from task2 import DirectedGraph, UndirectedGraph
 
-
-# создание парсера, который будет считывать флаги исходного файла
-# и также выходного, если потребуется
-def create_parser():
-    argument_parser = argparse.ArgumentParser()
-    argument_parser.add_argument('-e', default=False)
-    argument_parser.add_argument('-m', default=False)
-    argument_parser.add_argument('-l', default=False)
-    argument_parser.add_argument('-o', default=False)
-
-    return argument_parser
-
-
-# проверка на то, что введен только один флаг из трех (-e, -m, -l)
-def check_num_args(arguments):
-    # считаем все ненулевые флаги и вычитаем флаг о, если тот был указан
-    count_flags = sum([1 for flag in vars(arguments).values() if flag is not False])
-    count_flags -= arguments.o is not False
-
-    # если был указан один флаг, то находим флаг и с каким файлом он был указан
-    if count_flags == 1:
-        path_to_file = ''
-        correct_flag = 0
-        for i in vars(arguments):
-            # нашли ненулевой флаг - запомнили его и имя файла
-            if vars(arguments)[i] is not False:
-                path_to_file = vars(arguments)[i]
-                correct_flag = i
-                break
-        return path_to_file, correct_flag
-
-    # иначе возвращаем ошибку
-    return False, False
-
-
-# проверка на нужду выходного файла
-def check_file_needed(arg_o):
-    if arg_o:
-        # если файл нужен - меняем поток вывода из консоли на файл
-        output.switch_to_file_output(arg_o)
-        # очищаем файл путем открытия его для записи перед основной работой
-        with open(arg_o, "w") as file:
-            file.write("")
-
-
+# все комментарии по коду есть в Main1.py, они одинаковы
 if __name__ == '__main__':
-    # словарь стратегий, где по ключу (флагу) получаем функцию считывания матрицы из файла
     strategies = {
         'm': lambda path: Strategy.matrix_strategy(path),
         'e': lambda path: Strategy.edges_strategy(path),
         'l': lambda path: Strategy.list_strategy(path)
     }
 
-    output = Output.Output()  # создаем экземпляр класса Output из модуля Output
-    parser = create_parser()  # создаем парсер
-    args = parser.parse_args()  # получаем все флаги этого парсера
+    output = OutputModule.Output()
+    parser = ParserModule.Parser(2)
+    args = parser.args
 
-    path, flag = check_num_args(args)
+    try:
+        file_path, flag = parser.path_to_file, parser.input_flag
 
-    if (path, flag) != (False, False):
+        if file_path:
+            # вывод сильных/слабых компонент связности графа
+            graph = GraphModule.Graph(strategies[flag](file_path))
+            output.check_file_needed(args.o)
 
-        graph = Graph.Graph(strategies[flag](path))
-        check_file_needed(args.o)
+            # если граф ориентирован - нужен Косараджу
+            if graph.is_directed():
+                task2_graph = DirectedGraph.DirectedGraph(graph)
+                kosaraju = task2_graph.kosaraju()
 
-        if graph.is_directed():
-            task2_graph = DirectedGraph.DirectedGraph(graph)
-            kosaraju = task2_graph.kosaraju()
-            if kosaraju[0] == 1:
-                output.write("Graph is strongly connected")
-            elif task2_graph.is_graph_weak_connected():
-                output.write("Graph is weakly connected")
-            else:
-                output.write("Graph is not connected")
+                if kosaraju[0] == 1:
+                    output.write("Graph is strongly connected")
+                elif task2_graph.is_graph_weak_connected():
+                    output.write("Graph is weakly connected")
+                else:
+                    output.write("Graph is not connected")
 
-            output.write(f"{kosaraju[0]} Strongly connected components:\n{kosaraju[1]}")
-            output.write(f"{task2_graph.count_weak_connected_components()[0]} Weakly connected components:\n\
+                output.write(f"{kosaraju[0]} Strongly connected components:\n{kosaraju[1]}")
+                output.write(f"{task2_graph.count_weak_connected_components()[0]} Weakly connected components:\n\
 {task2_graph.count_weak_connected_components()[1]}")
 
-        # если граф не ориентирован
-        else:
-            # выписываем связный он или нет и компоненты связности
-            task2_graph = UndirectedGraph.UndirectedGraph(graph)
-            if task2_graph.is_graph_connected():
-                output.write("Graph is connected")
+            # если граф не ориентирован
             else:
-                output.write("Graph is not connected")
-            output.write(f"{task2_graph.count_graph_connected_components()[0]} Connected components:\n\
+                # выписываем связный он или нет и компоненты связности
+                task2_graph = UndirectedGraph.UndirectedGraph(graph)
+                if task2_graph.is_graph_connected():
+                    output.write("Graph is connected")
+                else:
+                    output.write("Graph is not connected")
+                output.write(f"{task2_graph.count_graph_connected_components()[0]} Connected components:\n\
 {task2_graph.count_graph_connected_components()[1]}")
 
-    else:
-        print("Было передано неверное количество ключей с параметрами")
+        else:
+            print("Было передано неверное количество ключей с параметрами")
+    # если получаем хоть одну ошибку - кидаем исключение
+    except Exception as e:
+        print(e)

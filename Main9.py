@@ -1,54 +1,7 @@
-import argparse
-from task0 import Graph, Output, Strategy
+from task0 import GraphModule, OutputModule, Strategy, ParserModule
 from task9 import AntColony
 
-
-# создание парсера, который будет считывать флаги исходного файла
-# и также выходного, если потребуется
-def create_parser():
-    argument_parser = argparse.ArgumentParser()
-    argument_parser.add_argument('-e', default=False)
-    argument_parser.add_argument('-m', default=False)
-    argument_parser.add_argument('-l', default=False)
-    argument_parser.add_argument('-o', default=False)
-
-    argument_parser.add_argument('-n')
-
-    return argument_parser
-
-
-# проверка на то, что введен только один флаг из трех (-e, -m, -l)
-def check_num_args(arguments):
-    # считаем все ненулевые флаги и вычитаем флаг о, если тот был указан
-    count_flags = (arguments.e is not False) + (arguments.m is not False) + \
-                  (arguments.l is not False)
-
-    # если был указан один флаг, то находим флаг и с каким файлом он был указан
-    if count_flags == 1:
-        path_to_file = ''
-        correct_flag = 0
-        for i in vars(arguments):
-            # нашли ненулевой флаг - запомнили его и имя файла
-            if vars(args)[i] is not False:
-                path_to_file = vars(arguments)[i]
-                correct_flag = i
-                break
-        return path_to_file, correct_flag
-
-    # иначе возвращаем ошибку
-    return False, False
-
-
-# проверка на нужду выходного файла
-def check_file_needed(arg_o):
-    if arg_o:
-        # если файл нужен - меняем поток вывода из консоли на файл
-        output.switch_to_file_output(arg_o)
-        # очищаем файл путем открытия его для записи перед основной работой
-        with open(arg_o, "w") as file:
-            file.write("")
-
-
+# все комментарии по коду есть в Main1.py, они одинаковы
 if __name__ == '__main__':
     # словарь стратегий, где по ключу (флагу) получаем функцию считывания матрицы из файла
     strategies = {
@@ -57,23 +10,27 @@ if __name__ == '__main__':
         'l': lambda path: Strategy.list_strategy(path)
     }
 
-    output = Output.Output()  # создаем экземпляр класса Output из модуля Output
-    parser = create_parser()  # создаем парсер
-    args = parser.parse_args()  # получаем все флаги этого парсера
+    output = OutputModule.Output()
+    parser = ParserModule.Parser(9)
+    args = parser.args
 
-    # если указано верное количество флагов - действуем
-    path, flag = check_num_args(args)
+    #try:
+    file_path, flag = parser.path_to_file, parser.input_flag
 
-    if (path, flag) != (False, False):
-        check_file_needed(args.o)
-        graph = Graph.Graph(strategies[flag](path))
+    if file_path:
+        # вывод гамильтонового цикла и его длины
+        output.check_file_needed(args.o)
+        graph = GraphModule.Graph(strategies[flag](file_path))
         task9_graph = AntColony.AntColony(graph)
         res = task9_graph.ant_colony(int(args.n))
 
-        len = sum(res[i][2] for i in range(len(res)))
-        output.write(f"Hamiltonian cycle has length {len}.")
+        length = sum(res[i][2] for i in range(len(res)))
+        output.write(f"Hamiltonian cycle has length {length}.")
         for i in res:
             output.write(f"{i[0] + 1} - {i[1] + 1} : ({i[2]})")
 
     else:
         print("Было передано неверное количество ключей с параметрами")
+    # если получаем хоть одну ошибку - кидаем исключение
+    #except Exception as e:
+    #    print(e)

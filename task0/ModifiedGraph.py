@@ -1,4 +1,4 @@
-from task0 import Graph as GraphModule
+from task0 import GraphModule as GraphModule
 
 
 # модифицированный класс графа, расширяющий функционал обычного
